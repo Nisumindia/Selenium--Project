@@ -7,6 +7,9 @@ from docx import Document
 from docx.shared import Inches
 import time
 import random
+import sys
+import os
+import requests
 
 document = Document()
 p = document.add_paragraph()
@@ -114,5 +117,22 @@ time.sleep(10)
 driver.save_screenshot("/Users/premkumer/Downloads/9-thank_you.png")
 r.add_picture("/Users/premkumer/Downloads/9-thank_you.png",width=Inches(8.0), height=Inches(5.0))
 document.save('demo.docx')
-#driver.close()
+driver.close()
 #driver.find_element_by_id("guest-checkout").click()
+
+
+###Attaching document to jirra ticket33333333
+
+requests.packages.urllib3.disable_warnings()
+verify = False
+file=demo.docx
+user=BH05032
+password=Macys$321
+ticket_id=MCOMRE-178852
+url = 'http://jira.federated.fds/rest/api/2/issue/%s/attachments' % (ticket_id)
+files = {'file': open('%s' %file, 'rb')}
+#input_file=open('%s' %file,'rb')
+headers = {"X-Atlassian-Token": "nocheck"}
+r = requests.post(url, auth=(user, password), files=files, headers=headers, verify=verify)
+print(r.status_code)
+print(r.text)
